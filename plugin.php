@@ -53,11 +53,38 @@ function custom_file_upload_form()
 	echo ob_get_clean();
 }
 
+function custom_css_editor_page()
+{
+	if (isset($_POST['custom_css'])) {
+		update_option('custom_css', $_POST['custom_css']);
+	}
+
+	$custom_css = get_option('custom_css');
+?>
+	<div class="wrap">
+		<h2>Custom CSS Editor</h2>
+		<form method="post">
+			<textarea name="custom_css" rows="10" style="width: 100%;"><?php echo esc_textarea($custom_css); ?></textarea>
+			<p><input type="submit" class="button-primary" value="Save CSS"></p>
+		</form>
+	</div>
+<?php
+}
+
+function custom_css_editor_menu()
+{
+	add_menu_page('Custom CSS Editor', 'CSS Editor', 'manage_options', 'custom-css-editor', 'custom_css_editor_page');
+}
+
+add_action('admin_menu', 'custom_css_editor_menu');
+
+
 function my_custom_localfonts_page()
 {
 	// Your menu content goes here
 	echo '<div class="wrap"><h2>Localfonts Menu</h2></div>';
 	custom_file_upload_form();
+	custom_css_editor_page();
 }
 
 function handle_file_upload()
@@ -72,7 +99,7 @@ function handle_file_upload()
 		}
 
 		// Check if the uploaded file is a font file (e.g., .ttf, .woff, .woff2).
-		$allowed_font_types = array('ttf', 'woff', 'woff2', 'eot' , 'svg');
+		$allowed_font_types = array('ttf', 'woff', 'woff2', 'eot', 'svg');
 		$file_info = pathinfo($uploaded_file['name']);
 
 		if (in_array($file_info['extension'], $allowed_font_types)) {
