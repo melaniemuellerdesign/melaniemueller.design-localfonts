@@ -73,11 +73,9 @@ function handle_file_upload()
 
 		// Check if the uploaded file is a font file (e.g., .ttf, .woff, .woff2).
 		$allowed_font_types = array('ttf', 'woff', 'woff2', 'eot' , 'svg');
-		$file_info = wp_check_filetype($uploaded_file['name']);
-		var_dump(wp_check_filetype($uploaded_file['name']));
-		exit;
+		$file_info = pathinfo($uploaded_file['name']);
 
-		if (in_array($file_info['ext'], $allowed_font_types)) {
+		if (in_array($file_info['extension'], $allowed_font_types)) {
 			$target_path = $upload_dir . basename($uploaded_file['name']);
 
 			if (move_uploaded_file($uploaded_file['tmp_name'], $target_path)) {
