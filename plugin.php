@@ -1,0 +1,111 @@
+<?php
+
+/**
+ * Plugin Name: melaniemueller.design-localfonts
+ * Description: Add local fonts to the website
+ * Author: melaniemueller.design
+ * Author URI: https://melaniemueller.design
+ * License: GPL2+
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
+ */
+
+function add_plugin_menu()
+{
+	add_submenu_page(
+		'themes.php',          // Parent menu slug (Appearance)
+		'Localfonts',         // Page title
+		'Localfonts',         // Menu title
+		'manage_options',      // Capability required to access the menu
+		'localfonts-slug',    // Menu slug
+		'my_custom_localfonts_page'  // Callback function to display the menu content
+	);
+}
+add_action('admin_menu', 'add_plugin_menu');
+
+function custom_file_upload_form()
+{
+	ob_start();
+?>
+	<form method="post" enctype="multipart/form-data">
+		<label for="file">Choose a font file:</label>
+		<input type="file" name="file" id="file">
+		<input type="submit" name="upload" value="Upload File">
+	</form>
+
+	<!-- Display the list of uploaded font files -->
+	<h3>Uploaded Font Files:</h3>
+	<ul>
+		<?php
+		$upload_dir = plugin_dir_path(__FILE__) . 'files/';
+		$files = scandir($upload_dir);
+
+		foreach ($files as $file) {
+			if ($file !== '.' && $file !== '..') {
+				echo "<li>";
+				echo "<a href='" . plugins_url('files/' . $file, __FILE__) . "' target='_blank'>$file</a>";
+				echo " <a href='?delete_file=$file'>Delete</a>";
+				echo "</li>";
+			}
+		}
+		?>
+	</ul>
+<?php
+	echo ob_get_clean();
+}
+
+function my_custom_localfonts_page()
+{
+	// Your menu content goes here
+	echo '<div class="wrap"><h2>Localfonts Menu</h2></div>';
+	custom_file_upload_form();
+}
+
+function handle_file_upload()
+{
+	if (isset($_POST['upload'])) {
+		$uploaded_file = $_FILES['file'];
+		$upload_dir = plugin_dir_path(__FILE__) . 'files/'; // Save files in a 'files' subdirectory of your plugin.
+
+		// Ensure the target directory exists, or create it if it doesn't.
+		if (!file_exists($upload_dir)) {
+			mkdir($upload_dir, 0755, true);
+		}
+
+		// Check if the uploaded file is a font file (e.g., .ttf, .woff, .woff2).
+		$allowed_font_types = array('ttf', 'woff', 'woff2', 'eot' , 'svg');
+		$file_info = wp_check_filetype($uploaded_file['name']);
+		var_dump(wp_check_filetype($uploaded_file['name']));
+		exit;
+
+		if (in_array($file_info['ext'], $allowed_font_types)) {
+			$target_path = $upload_dir . basename($uploaded_file['name']);
+
+			if (move_uploaded_file($uploaded_file['tmp_name'], $target_path)) {
+				// File uploaded successfully.
+				echo "Font file uploaded successfully!";
+			} else {
+				// Error handling for a failed upload.
+				echo "Font file upload failed!";
+			}
+		} else {
+			// File is not a supported font file.
+			echo "Please upload a supported font file (TTF, WOFF, WOFF2).";
+		}
+	}
+
+	if (isset($_GET['delete_file'])) {
+		$file_to_delete = sanitize_text_field($_GET['delete_file']);
+		$upload_dir = plugin_dir_path(__FILE__) . 'files/';
+
+		if (file_exists($upload_dir . $file_to_delete)) {
+			unlink($upload_dir . $file_to_delete);
+		}
+
+		// Redirect to the Localfonts submenu page after deleting.
+		$localfonts_page_url = admin_url('admin.php?page=localfonts-slug');
+		wp_safe_redirect($localfonts_page_url);
+		exit();
+	}
+}
+
+add_action('admin_init', 'handle_file_upload');

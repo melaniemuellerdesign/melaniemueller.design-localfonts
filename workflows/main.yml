@@ -1,0 +1,73 @@
+name: Build Release
+on:
+  push:
+    tags:
+      - 'v*' # Push events to matching v*, i.e.  v1.0, v20.15.10
+
+jobs:
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code #Checkout Code
+        uses: actions/checkout@v2
+      - name: Generate changelog #Generate Changelog
+        id: changelog
+        uses: metcalfc/changelog-generator@v4.1.0
+        with:
+          myToken: ${{ secrets.GIT_PAT_TOKEN_ANIMATECSS }}
+      - name: Create Release #Create a lease based on a new tag
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_PAT_TOKEN_ANIMATECSS}} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.changelog }} #uses the changelog
+          draft: false
+          prerelease: false
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy ZIP and JSON
+    steps:
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Create result folder
+        run: mkdir -p result
+
+      - name: Create ZIP archive
+        run: |
+          # Install zip utility if not already installed
+          sudo apt-get install -y zip
+
+          #create a folder
+          mkdir ${{ vars.PRODUCTNAME }}
+
+          #copy files into it
+          #cp -r * ${{ vars.PRODUCTNAME }}/
+          rsync -av --exclude='${{ vars.PRODUCTNAME }}' * ${{ vars.PRODUCTNAME }}/
+
+          # Define the name of the ZIP file and the folder to be compressed
+          zip -r ${{ vars.PRODUCTNAME }}.zip ${{ vars.PRODUCTNAME }} ${{ vars.EXCLUDED_FILES_IN_ZIP }} 
+
+          #copy result folder
+          cp -r ${{ vars.PRODUCTNAME }}.zip result/
+          cp -r info.json result/
+          
+      - name: Upload ZIP archive
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ vars.PRODUCTNAME }}  # Name of the artifact without any special characters or spaces
+          path: result/${{ vars.PRODUCTNAME }}.zip
+
+      - uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}  # You should store FTP credentials as GitHub secrets
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: result/
+          server-dir: ./melaniemueller.design/development/${{ vars.PRODUCTNAME }}/ #  Replace with your remote directory path
