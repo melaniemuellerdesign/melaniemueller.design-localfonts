@@ -149,3 +149,9 @@ function handle_file_upload()
 }
 
 add_action('admin_init', 'handle_file_upload');
+
+// Define the path to the src folder
+$src_path = plugin_dir_path(__FILE__) . 'src/';
+
+// Include a specific file
+include($src_path . 'update.php');
