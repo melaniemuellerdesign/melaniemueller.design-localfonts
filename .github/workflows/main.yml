@@ -15,7 +15,7 @@ jobs:
         id: changelog
         uses: metcalfc/changelog-generator@v4.1.0
         with:
-          myToken: ${{ secrets.GIT_PAT_TOKEN_ANIMATECSS }}
+          myToken: ${{ secrets.GIT_PAT_TOKEN_LOCALFONTS }}
       - name: Create Release #Create a lease based on a new tag
         id: create_release
         uses: actions/create-release@v1
