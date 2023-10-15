@@ -1,6 +1,6 @@
 {
     "melaniemueller.design-localfonts": {
-        "version": "v0.0.0.4",
+        "version": "v0.0.0.5",
         "package": "https://melaniemueller.design/development/melaniemueller.design-localfonts/melaniemueller.design-localfonts.zip",
         "updateURL": "https://melaniemueller.design/development/melaniemueller.design-localfonts/info.json",
         "requires": "6.2",
