@@ -78,6 +78,21 @@ function custom_css_editor_menu()
 
 add_action('admin_menu', 'custom_css_editor_menu');
 
+//output css in head
+function custom_css_output()
+{
+	if (current_user_can('manage_options')) {
+		$custom_css = get_option('custom_css');
+
+		if (!empty($custom_css)) {
+			echo '<style type="text/css">' . esc_html($custom_css) . '</style>';
+		}
+	}
+}
+
+add_action('wp_head', 'custom_css_output');
+
+
 
 function my_custom_localfonts_page()
 {
