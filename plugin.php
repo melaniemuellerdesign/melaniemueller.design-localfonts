@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: melaniemueller.design-localfonts
+ * Plugin Name: melaniemuellerdesign-localfonts
  * Description: Add local fonts to the website
  * Author: melaniemueller.design
  * Author URI: https://melaniemueller.design
