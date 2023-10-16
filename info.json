@@ -1,5 +1,5 @@
 {
-    "melaniemuellerdesign-localfonts": {
+    "melaniemuellerdesign-localfonts/plugin.php": {
         "version": "v0.0.0.7",
         "package": "https://melaniemueller.design/development/melaniemuellerdesign-localfonts/melaniemuellerdesign-localfonts.zip",
         "updateURL": "https://melaniemueller.design/development/melaniemuellerdesign-localfonts/info.json",

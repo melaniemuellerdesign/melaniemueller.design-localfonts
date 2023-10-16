@@ -10,7 +10,7 @@ function get_json_response_localfonts($url, $target)
     $response = wp_safe_remote_get($url);
 
     $obj = json_decode($response['body'], true);
-    $themeName = 'melaniemuellerdesign-localfonts';
+    $themeName = 'melaniemuellerdesign-localfonts/plugin.php';
     $themeArray = ($obj[$themeName]);
     $jsonResult = $themeArray[$target];
 
@@ -48,48 +48,39 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
     $requires = get_json_response_localfonts($updateJSON, 'requires');
     $requires_php = get_json_response_localfonts($updateJSON, 'requires_php');
 
+
+
     // Query premium/private repo for updates.
     if ($update === true) {
+
         // Update is available.
         // $update should be an array containing all of the fields in $item below.
-        $update = array(
-            'id'            => 'melaniemuellerdesign-localfonts/plugin.php',
-            'slug'          => 'melaniemuellerdesign-localfonts',
-            'plugin'        => 'melaniemuellerdesign-localfonts/plugin.php',
+        $nowupdate = array(
+            'slug'          => 'melaniemuellerdesign-localfonts/plugin.php',
+            'plugin'          => 'melaniemuellerdesign-localfonts/plugin.php',
             'new_version'  => $remote_version,
             'url'          => $updateJSON,
             'package'      => $remote_package,
-            'icons'         => array(),
-            'banners'       => array(),
-            'banners_rtl'   => array(),
             'requires'     => $requires,
             'requires_php' => $requires_php,
-            'compatibility' => new stdClass(),
         );
 
-                $transient->response['melaniemuellerdesign-localfonts/plugin.php'] = $update;
-            } else {
-                // No update is available.
-                $item = array(
-                    'id'            => 'melaniemuellerdesign-localfonts/plugin.php',
-                    'slug'          => 'melaniemuellerdesign-localfonts',
-                    'plugin'        => 'melaniemuellerdesign-localfonts/plugin.php',
-                    'new_version'   => $current_version,
-                    'url'           => '',
-                    'package'       => '',
-                    'icons'         => array(),
-                    'banners'       => array(),
-                    'banners_rtl'   => array(),
-                    'tested'        => '',
-                    'requires_php'  => '',
-                    'compatibility' => new stdClass(),
-                );
-                // Adding the "mock" item to the `no_update` property is required
-                // for the enable/disable auto-updates links to correctly appear in UI.
-                $transient->no_update['melaniemuellerdesign-localfonts/plugin.php'] = $item;
-            }
+        $transient->response['melaniemuellerdesign-localfonts/plugin.php'] = $nowupdate;
+    } else {
+        // No update is available.
+        $item = array(
+            'slug'          => 'melaniemuellerdesign-localfonts/plugin.php',
+            'plugin'          => 'melaniemuellerdesign-localfonts/plugin.php',
+            'new_version'   => $current_version,
+            'url'           => '',
+            'package'       => '',
+        );
+        // Adding the "mock" item to the `no_update` property is required
+        // for the enable/disable auto-updates links to correctly appear in UI.
+        $transient->no_update['melaniemuellerdesign-localfonts/plugin.php'] = $item;
+    }
 
-            return $transient;
-        }
+    return $transient;
+}
 
-        add_filter('pre_set_site_transient_update_plugins', 'myplugin_pre_set_site_transient_update_plugins');
+add_filter('pre_set_site_transient_update_plugins', 'myplugin_pre_set_site_transient_update_plugins');

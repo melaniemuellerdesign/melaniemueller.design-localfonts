@@ -3,10 +3,15 @@
 /**
  * Plugin Name: melaniemuellerdesign-localfonts
  * Description: Add local fonts to the website
+ * Text Domain: melaniemuellerdesign-localfonts
  * Author: melaniemueller.design
  * Author URI: https://melaniemueller.design
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
+ * Update URI: https://example.com/my-plugin/
+ * Update URI:  https://melaniemueller.design/development/melaniemuellerdesign-underscores
+ * Domain Path: /languages
+ * Version: v0.0.0.7
  */
 
 function custom_file_upload_form()
