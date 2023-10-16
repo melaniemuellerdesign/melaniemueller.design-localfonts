@@ -5,20 +5,28 @@
  * 
  */
 
+function get_json_response_localfonts($url, $target)
+{
+    $response = wp_safe_remote_get($url);
+
+    $obj = json_decode($response['body'], true);
+    $themeName = 'melaniemueller.design-localfonts';
+    $themeArray = ($obj[$themeName]);
+    $jsonResult = $themeArray[$target];
+
+    return $jsonResult;
+}
 
 function myplugin_check_for_updates($plugin)
 {
     //get current version
-    $currentURL = plugin_dir_path(ABSPATH) . '/wp-content/plugins/melaniemueller.design-localfonts/info.json'; // Get the currently active plugin
-    $current_version = get_json_response($currentURL, 'version'); // Get the version of the plugin
-    $currentJSON = plugin_dir_path(ABSPATH) . '/wp-content/plugins/melaniemueller.design-localfonts/info.json'; // Get the currently active plugin
-
-    var_dump($currentURL);
-    exit;
+    $currentURL = get_home_url() . '/wp-content/plugins/melaniemueller.design-localfonts/info.json'; // Get the currently active plugin
+    $current_version = get_json_response_localfonts($currentURL, 'version'); // Get the version of the plugin
+    $currentJSON = get_home_url() . '/wp-content/plugins/melaniemueller.design-localfonts/info.json'; // Get the currently active plugin
 
     //get update version
-    $updateURL = get_json_response($currentJSON, 'updateURL');
-    $remote_version  = get_json_response($updateURL, 'version');
+    $updateURL = get_json_response_localfonts($currentJSON, 'updateURL');
+    $remote_version  = get_json_response_localfonts($updateURL, 'version');
 
     if (version_compare($current_version, $remote_version, '<')) {
         return true;
@@ -29,16 +37,16 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
 {
     $update = myplugin_check_for_updates('melaniemueller.design-localfonts');
 
-    $currentJSON = plugin_dir_path(ABSPATH) . '/wp-content/plugins/melaniemueller.design-localfonts/info.json'; // Get the currently active plugin  
-    $current_version = get_json_response($currentJSON, 'version'); // Get the version of the plugin
+    $currentJSON = get_home_url() . '/wp-content/plugins/melaniemueller.design-localfonts/info.json'; // Get the currently active plugin
+    $current_version = get_json_response_localfonts($currentJSON, 'version'); // Get the version of the plugin
 
 
     //get update version
-    $updateJSON = get_json_response($currentJSON, 'updateURL');
-    $remote_version  = get_json_response($updateJSON, 'version');
-    $remote_package  = get_json_response($updateJSON, 'package');
-    $requires = get_json_response($updateJSON, 'requires');
-    $requires_php = get_json_response($updateJSON, 'requires_php');
+    $updateJSON = get_json_response_localfonts($currentJSON, 'updateURL');
+    $remote_version  = get_json_response_localfonts($updateJSON, 'version');
+    $remote_package  = get_json_response_localfonts($updateJSON, 'package');
+    $requires = get_json_response_localfonts($updateJSON, 'requires');
+    $requires_php = get_json_response_localfonts($updateJSON, 'requires_php');
 
 
     // Query premium/private repo for updates.
