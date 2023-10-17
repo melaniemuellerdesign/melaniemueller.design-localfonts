@@ -8,9 +8,7 @@
  * Author URI: https://melaniemueller.design
  * License: GPL2+
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
- * Update URI: https://example.com/my-plugin/
  * Update URI:  https://melaniemueller.design/development/melaniemuellerdesign-localfonts
- * Domain Path: /languages
  * Version: v0.0.0.7
  */
 
@@ -146,5 +144,5 @@ add_action('admin_init', 'handle_file_upload');
 $src_path = plugin_dir_path(__FILE__) . 'src/';
 
 // Include a specific file
-include($src_path . 'update.php');
-include($src_path . 'pluginmenu.php');
+require_once($src_path . 'update.php');
+require_once($src_path . 'pluginmenu.php');
