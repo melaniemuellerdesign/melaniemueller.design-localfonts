@@ -8,11 +8,11 @@
  * Author: melaniemueller.design
  * Author URI: https://melaniemueller.design
  * License: GPL2+
- * Tested up to: 5.4
+ * Tested up to: 6.3.1
  * Requires PHP: 5.6
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Update URI:  https://melaniemueller.design/development/melaniemuellerdesign-localfonts/info.json
- * Version: v0.0.0.7
+ * Version: v0.0.0.9
  */
 
 function custom_file_upload_form()
