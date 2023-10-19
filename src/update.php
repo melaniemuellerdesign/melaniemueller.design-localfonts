@@ -47,7 +47,6 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
     $myplugin_future_requires_php = get_json_response_localfonts($updateJSON, 'requires_php');
 
 
-
     // Query premium/private repo for updates.
     if ($updateCheck === true) {
         // Update is available.
@@ -57,12 +56,13 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
             'slug'          => 'melaniemuellerdesign-localfonts',
             'plugin'        => 'melaniemuellerdesign-localfonts',
             'new_version'   => $myplugin_future_version,
-            'url'           => '',
+            'url'           => $currentJSON,
             'package'       => $myplugin_future_package,
             'tested'        => $myplugin_future_requires,
             'requires_php'  => $myplugin_future_requires_php,
             'compatibility' => new stdClass(),
         );
+
         $transient->response['melaniemuellerdesign-localfonts'] = $update;
     } else {
         // No update is available.
@@ -71,7 +71,7 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
             'slug'          => 'melaniemuellerdesign-localfonts',
             'plugin'        => 'melaniemuellerdesign-localfonts',
             'new_version'   => $myplugin_current_version,
-            'url'           => '',
+            'url'           => $currentJSON,
             'package'       => '',
             'tested'        => '',
             'requires_php'  => '',
