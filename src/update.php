@@ -58,8 +58,8 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
             'new_version'   => $myplugin_future_version,
             'url'           => $currentJSON,
             'package'       => $myplugin_future_package,
-            'tested'        => '',
-            'requires_php'  => '',
+            'tested'        => $myplugin_future_requires,
+            'requires_php'  => $myplugin_future_requires_php,
             'compatibility' => new stdClass(),
         );
 
