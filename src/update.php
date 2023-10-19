@@ -51,35 +51,34 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
     if ($updateCheck === true) {
         // Update is available.
         // $update should be an array containing all of the fields in $item below.
-        $update = array(
-            'id'            => 'melaniemuellerdesign-localfonts',
+        $update = (object) array(
+            'id'            => 'melaniemuellerdesign-localfonts/plugin.php',
             'slug'          => 'melaniemuellerdesign-localfonts',
-            'plugin'        => 'melaniemuellerdesign-localfonts',
+            'plugin'        => 'melaniemuellerdesign-localfonts/plugin.php',
             'new_version'   => $myplugin_future_version,
             'url'           => $currentJSON,
             'package'       => $myplugin_future_package,
-            'tested'        => $myplugin_future_requires,
-            'requires_php'  => $myplugin_future_requires_php,
+            'tested'        => '',
+            'requires_php'  => '',
             'compatibility' => new stdClass(),
         );
 
-        $transient->response['melaniemuellerdesign-localfonts'] = $update;
+        $transient->response['melaniemuellerdesign-localfonts/plugin.php'] = $update;
     } else {
         // No update is available.
-        $item = array(
-            'id'            => 'melaniemuellerdesign-localfonts',
+        $item = (object) array(
+            'id'            => 'melaniemuellerdesign-localfonts/plugin.php',
             'slug'          => 'melaniemuellerdesign-localfonts',
-            'plugin'        => 'melaniemuellerdesign-localfonts',
+            'plugin'        => 'melaniemuellerdesign-localfonts/plugin.php',
             'new_version'   => $myplugin_current_version,
             'url'           => $currentJSON,
-            'package'       => '',
             'tested'        => '',
             'requires_php'  => '',
             'compatibility' => new stdClass(),
         );
         // Adding the "mock" item to the `no_update` property is required
         // for the enable/disable auto-updates links to correctly appear in UI.
-        $transient->no_update['melaniemuellerdesign-localfonts'] = $item;
+        $transient->no_update['melaniemuellerdesign-localfonts/plugin.php'] = $item;
     }
 
     return $transient;
