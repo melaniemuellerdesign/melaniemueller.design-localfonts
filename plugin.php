@@ -12,7 +12,7 @@
  * Requires PHP: 5.6
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Update URI:  https://melaniemueller.design/development/melaniemuellerdesign-localfonts/info.json
- * Version: v0.0.0.9
+ * Version: v0.0.1.1
  */
 
 function custom_file_upload_form()
