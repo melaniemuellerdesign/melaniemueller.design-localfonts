@@ -64,13 +64,6 @@ function custom_css_editor_page()
 <?php
 }
 
-function custom_css_editor_menu()
-{
-	add_menu_page('Custom CSS Editor', 'CSS Editor', 'manage_options', 'custom-css-editor', 'custom_css_editor_page');
-}
-
-add_action('admin_menu', 'custom_css_editor_menu');
-
 //output css in head
 function custom_css_output()
 {
