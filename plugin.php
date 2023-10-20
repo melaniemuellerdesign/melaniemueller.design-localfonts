@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name: melaniemuellerdesign-localfonts
- * Plugin URI: http://underscores.me/
+ * Plugin URI: http://melaniemueller.design
  * Description: Add local fonts to the website
  * Text Domain: melaniemuellerdesign-localfonts
  * Author: melaniemueller.design
