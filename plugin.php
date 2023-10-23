@@ -15,6 +15,19 @@
  * Version: v0.0.1.1
  */
 
+/*add localfonts folder to wp-content*/
+
+register_activation_hook(__FILE__, 'create_localfonts_folder');
+
+function create_localfonts_folder()
+{
+	$localfonts_dir = WP_CONTENT_DIR . '/localfonts';
+
+	if (!file_exists($localfonts_dir)) {
+		wp_mkdir_p($localfonts_dir);
+	}
+}
+
 function custom_file_upload_form()
 {
 	ob_start();
