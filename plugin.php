@@ -12,7 +12,7 @@
  * Requires PHP: 5.6
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Update URI:  https://melaniemueller.design/development/melaniemuellerdesign-localfonts/info.json
- * Version: v0.0.1.1
+ * Version: v0.0.1.2
  */
 
 /*add localfonts folder to wp-content*/
