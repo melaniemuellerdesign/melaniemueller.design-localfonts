@@ -1,18 +1,20 @@
 <?php
 
 if (!defined('WP_UNINSTALL_PLUGIN')) {
-exit();
+die;
 }
 
-// Define the activation hook function
-function my_plugin_deletion()
-{
-    $localfonts_dir = WP_CONTENT_DIR . '/localfonts';
+// Define the path to the folder you want to delete
+$folder_path = WP_CONTENT_DIR . '/localfonts';
 
-    if (!file_exists($localfonts_dir)) {
-        rmdir($localfonts_dir);
+// Check if the folder exists before attempting to delete it
+if (is_dir($folder_path)) {
+    // Delete all files in the folder
+    $files = glob($folder_path . '/*');
+    foreach ($files as $file) {
+        unlink($file);
     }
-}
 
-// Register the activation hook
-register_activation_hook(__FILE__, 'my_plugin_deletion');
+    // Delete the folder itself
+    rmdir($folder_path);
+}
