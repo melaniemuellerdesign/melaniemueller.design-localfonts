@@ -42,13 +42,13 @@ function custom_file_upload_form()
 	<h3>Uploaded Font Files:</h3>
 	<ul>
 		<?php
-		$upload_dir = plugin_dir_path(__FILE__) . 'files/';
+		$upload_dir = WP_CONTENT_DIR . '/localfonts/';
 		$files = scandir($upload_dir);
 
 		foreach ($files as $file) {
 			if ($file !== '.' && $file !== '..') {
 				echo "<li>";
-				echo "<a href='" . plugins_url('files/' . $file, __FILE__) . "' target='_blank'>$file</a>";
+				echo "<a href='" . get_home_url() . '/wp-content/localfonts/' . $file . "' target='_blank'>$file</a>";
 				echo " <a href='?delete_file=$file'>Delete</a>";
 				echo "</li>";
 			}
@@ -105,7 +105,7 @@ function handle_file_upload()
 {
 	if (isset($_POST['upload'])) {
 		$uploaded_file = $_FILES['file'];
-		$upload_dir = plugin_dir_path(__FILE__) . 'files/'; // Save files in a 'files' subdirectory of your plugin.
+		$upload_dir = WP_CONTENT_DIR . '/localfonts/'; // Save files in a 'files' subdirectory of your plugin.
 
 		// Ensure the target directory exists, or create it if it doesn't.
 		if (!file_exists($upload_dir)) {
@@ -134,7 +134,7 @@ function handle_file_upload()
 
 	if (isset($_GET['delete_file'])) {
 		$file_to_delete = sanitize_text_field($_GET['delete_file']);
-		$upload_dir = plugin_dir_path(__FILE__) . 'files/';
+		$upload_dir = WP_CONTENT_DIR . '/localfonts/';
 
 		if (file_exists($upload_dir . $file_to_delete)) {
 			unlink($upload_dir . $file_to_delete);
