@@ -12,7 +12,7 @@
  * Requires PHP: 5.6
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Update URI:  https://melaniemueller.design/development/melaniemuellerdesign-localfonts/info.json
- * Version: v0.0.1.3
+ * Version: v0.0.1.4
  */
 
 /*add localfonts folder to wp-content*/
@@ -157,3 +157,4 @@ $src_path = plugin_dir_path(__FILE__) . 'src/';
 // Include a specific file
 require_once($src_path . 'update.php');
 require_once($src_path . 'pluginmenu.php');
+require_once($src_path . 'adminicon.php');
