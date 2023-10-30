@@ -70,7 +70,7 @@ function custom_css_editor_page()
 	<div class="wrap">
 		<h2>Custom CSS Editor</h2>
 		<form method="post">
-			<textarea name="custom_css" rows="10" style="width: 100%;"><?php echo esc_textarea($custom_css); ?></textarea>
+			<textarea name="custom_css" rows="10" style="width: 100%;"><?php echo $custom_css; ?></textarea>
 			<p><input type="submit" class="button-primary" value="Save CSS"></p>
 		</form>
 	</div>
@@ -82,9 +82,11 @@ function custom_css_output()
 {
 	if (current_user_can('manage_options')) {
 		$custom_css = get_option('custom_css');
+		$custom_css_removed_backslash = str_replace("\\", "", $custom_css);
+
 
 		if (!empty($custom_css)) {
-			echo '<style type="text/css">' . esc_html($custom_css) . '</style>';
+			echo '<style type="text/css">' . $custom_css_removed_backslash . '</style>';
 		}
 	}
 }
