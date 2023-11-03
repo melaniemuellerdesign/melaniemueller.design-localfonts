@@ -1,8 +1,8 @@
 {
-    "melaniemuellerdesign-localfonts/plugin.php": {
+    "melaniemueller.design-localfonts/plugin.php": {
         "version": "v0.0.1.5",
-        "package": "https://melaniemueller.design/development/melaniemuellerdesign-localfonts/melaniemuellerdesign-localfonts.zip",
-        "updateURL": "https://melaniemueller.design/development/melaniemuellerdesign-localfonts/info.json",
+        "package": "https://melaniemueller.design/development/melaniemueller.design-localfonts/melaniemueller.design-localfonts.zip",
+        "updateURL": "https://melaniemueller.design/development/melaniemueller.design-localfonts/info.json",
         "requires": "6.3.2",
         "requires_php": "8.0"
         }

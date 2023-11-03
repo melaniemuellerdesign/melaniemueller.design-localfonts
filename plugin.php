@@ -1,17 +1,17 @@
 <?php
 
 /**
- * Plugin Name: melaniemuellerdesign-localfonts
+ * Plugin Name: melaniemueller.design-localfonts
  * Plugin URI: http://melaniemueller.design
  * Description: Add local fonts to the website
- * Text Domain: melaniemuellerdesign-localfonts
+ * Text Domain: melaniemueller.design-localfonts
  * Author: melaniemueller.design
  * Author URI: https://melaniemueller.design
  * License: GPL2+
  * Tested up to: 6.3.1
  * Requires PHP: 5.6
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
- * Update URI:  https://melaniemueller.design/development/melaniemuellerdesign-localfonts/info.json
+ * Update URI:  https://melaniemueller.design/development/melaniemueller.design-localfonts/info.json
  * Version: v0.0.1.5
  */
 
