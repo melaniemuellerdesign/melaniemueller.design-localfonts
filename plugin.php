@@ -12,7 +12,7 @@
  * Requires PHP: 5.6
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Update URI:  https://melaniemueller.design/development/melaniemueller.design-localfonts/info.json
- * Version: v0.0.1.7
+ * Version: v0.0.1.8
  */
 
 /*add localfonts folder to wp-content*/
@@ -80,7 +80,6 @@ function custom_css_editor_page()
 //output css in head
 function custom_css_output()
 {
-	if (current_user_can('manage_options')) {
 		$custom_css = get_option('custom_css');
 		$custom_css_removed_backslash = str_replace("\\", "", $custom_css);
 
@@ -88,7 +87,6 @@ function custom_css_output()
 		if (!empty($custom_css)) {
 			echo '<style type="text/css">' . $custom_css_removed_backslash . '</style>';
 		}
-	}
 }
 
 add_action('wp_head', 'custom_css_output');
