@@ -5,19 +5,35 @@
  * 
  */
 
-function get_json_response_localfonts($url, $target)
-{
-    $response = wp_safe_remote_get($url);
+ function get_json_response_localfonts($url, $target)
+ {
+     $response = wp_safe_remote_get($url);
+ 
+     // Überprüfung, ob die Anfrage fehlgeschlagen ist
+     if (is_wp_error($response)) {
+         error_log('Fehler bei der Remote-Anfrage: ' . $response->get_error_message());
+         return null; // oder einen sinnvollen Default-Wert zurückgeben
+     }
+ 
+     $body = wp_remote_retrieve_body($response);
+     $obj = json_decode($body, true);
+ 
+     if (!is_array($obj)) {
+         error_log('Fehler: Ungültiges JSON von ' . $url);
+         return null;
+     }
+ 
+     $themeName = 'melaniemueller.design-localfonts/plugin.php';
+     
+     if (!isset($obj[$themeName][$target])) {
+         error_log("Fehlender Schlüssel '$target' im JSON");
+         return null;
+     }
+ 
+     return $obj[$themeName][$target];
+ }
 
-    $obj = json_decode($response['body'], true);
-    $themeName = 'melaniemueller.design-localfonts/plugin.php';
-    $themeArray = ($obj[$themeName]);
-    $jsonResult = $themeArray[$target];
-
-    return $jsonResult;
-}
-
-function myplugin_check_for_updates($plugin)
+function localfonts_check_for_updates($plugin)
 {
     //get current version
     $currentJSON = get_home_url() . '/wp-content/plugins/' . $plugin . '/info.json'; // Get the currently active plugin
@@ -27,24 +43,30 @@ function myplugin_check_for_updates($plugin)
     $updateURL = get_json_response_localfonts($currentJSON, 'updateURL');
     $remote_version  = get_json_response_localfonts($updateURL, 'version');
 
+    // Stelle sicher, dass beide Werte gültig sind
+    if (empty($current_version) || empty($remote_version)) {
+        error_log("Fehler: Version konnte nicht abgerufen werden. Aktuell: $current_version, Remote: $remote_version");
+        return false;
+    }
+
     if (version_compare($current_version, $remote_version, '<')) {
         return true;
     }
 }
 
-function myplugin_pre_set_site_transient_update_plugins($transient)
+function localfonts_pre_set_site_transient_update_plugins($transient)
 {
-    $updateCheck = myplugin_check_for_updates('melaniemueller.design-localfonts');
+    $updateCheck = localfonts_check_for_updates('melaniemueller.design-localfonts');
 
     $currentJSON = get_home_url() . '/wp-content/plugins/melaniemueller.design-localfonts/info.json'; // Get the currently active plugin
-    $myplugin_current_version = get_json_response_localfonts($currentJSON, 'version'); // Get the version of the plugin
+    $localfonts_current_version = get_json_response_localfonts($currentJSON, 'version'); // Get the version of the plugin
 
     //get update version
     $updateJSON = get_json_response_localfonts($currentJSON, 'updateURL');
-    $myplugin_future_version  = get_json_response_localfonts($updateJSON, 'version');
-    $myplugin_future_package  = get_json_response_localfonts($updateJSON, 'package');
-    $myplugin_future_requires = get_json_response_localfonts($updateJSON, 'requires');
-    $myplugin_future_requires_php = get_json_response_localfonts($updateJSON, 'requires_php');
+    $localfonts_future_version  = get_json_response_localfonts($updateJSON, 'version');
+    $localfonts_future_package  = get_json_response_localfonts($updateJSON, 'package');
+    $localfonts_future_requires = get_json_response_localfonts($updateJSON, 'requires');
+    $localfonts_future_requires_php = get_json_response_localfonts($updateJSON, 'requires_php');
 
 
     // Query premium/private repo for updates.
@@ -55,11 +77,11 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
             'id'            => 'melaniemueller.design-localfonts/plugin.php',
             'slug'          => 'melaniemueller.design-localfonts',
             'plugin'        => 'melaniemueller.design-localfonts/plugin.php',
-            'new_version'   => $myplugin_future_version,
+            'new_version'   => $localfonts_future_version,
             'url'           => $currentJSON,
-            'package'       => $myplugin_future_package,
-            'tested'        => $myplugin_future_requires,
-            'requires_php'  => $myplugin_future_requires_php,
+            'package'       => $localfonts_future_package,
+            'tested'        => $localfonts_future_requires,
+            'requires_php'  => $localfonts_future_requires_php,
             'compatibility' => new stdClass(),
         );
 
@@ -70,7 +92,7 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
             'id'            => 'melaniemueller.design-localfonts/plugin.php',
             'slug'          => 'melaniemueller.design-localfonts',
             'plugin'        => 'melaniemueller.design-localfonts/plugin.php',
-            'new_version'   => $myplugin_current_version,
+            'new_version'   => $localfonts_current_version,
             'url'           => $currentJSON,
             'tested'        => '',
             'requires_php'  => '',
@@ -84,4 +106,4 @@ function myplugin_pre_set_site_transient_update_plugins($transient)
     return $transient;
 }
 
-add_filter('pre_set_site_transient_update_plugins', 'myplugin_pre_set_site_transient_update_plugins');
+add_filter('pre_set_site_transient_update_plugins', 'localfonts_pre_set_site_transient_update_plugins');
