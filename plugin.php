@@ -31,7 +31,14 @@ function create_localfonts_folder()
 function custom_file_upload_form()
 {
 	ob_start();
-?>
+	?>
+	<div class="notice notice-info inline" style="margin-bottom:1rem;margin-left: 0;">
+		<p>
+			<strong>Hinweis:</strong>
+			Bitte lade immer die .woff2 und .woff hoch.
+		</p>
+	</div>
+
 	<form method="post" enctype="multipart/form-data">
 		<label for="file">Choose a font file:</label>
 		<input type="file" name="file" id="file">
@@ -55,7 +62,7 @@ function custom_file_upload_form()
 		}
 		?>
 	</ul>
-<?php
+	<?php
 	echo ob_get_clean();
 }
 
@@ -66,15 +73,15 @@ function custom_css_editor_page()
 	}
 
 	$custom_css = get_option('custom_css');
-?>
-	<div class="wrap">
-		<h2>Custom CSS Editor</h2>
-		<form method="post">
-			<textarea name="custom_css" rows="10" style="width: 100%;"><?php echo $custom_css; ?></textarea>
-			<p><input type="submit" class="button-primary" value="Save CSS"></p>
-		</form>
-	</div>
-<?php
+	?>
+		<div class="wrap">
+			<h2>Custom CSS Editor</h2>
+			<form method="post">
+				<textarea name="custom_css" rows="10" style="width: 100%;"><?php echo $custom_css; ?></textarea>
+				<p><input type="submit" class="button-primary" value="Save CSS"></p>
+			</form>
+		</div>
+	<?php
 }
 
 //output css in head
@@ -99,6 +106,7 @@ function my_custom_localfonts_page()
 	// Your menu content goes here
 	echo '<div class="wrap"><h2>Localfonts Menu</h2></div>';
 	custom_file_upload_form();
+	get_all_font_files();
 	custom_css_editor_page();
 }
 
@@ -157,3 +165,55 @@ $src_path = plugin_dir_path(__FILE__) . 'src/';
 require_once($src_path . 'update.php');
 require_once($src_path . 'pluginmenu.php');
 require_once($src_path . 'adminicon.php');
+
+function get_all_font_files() {
+	$path = WP_CONTENT_DIR . '/localfonts';
+	$custom_css = '';
+
+	if (!is_dir($path) || !is_readable($path)) {
+		return;
+	}
+
+	$files = array_diff(scandir($path), array('..', '.'));
+	if (empty($files)) {
+		return;
+	}
+
+	foreach ( $files as $file) {
+		$fontStyle = preg_match('/italic/i', $file) ? 'italic' : 'normal';
+		$src = home_url('/wp-content/localfonts/' . $filename, 'https');
+		if (!preg_match('/\.woff2$/i', $file)) {
+			continue; // oder return, je nach Kontext
+		}
+		$filename = preg_replace('/\.woff2$/i', '', $file);
+
+
+		$allowedWeights = [100,200,300,400,500,600,700,800,900];
+		$weight = 400; // default
+		if (preg_match('/-(\d{3})\./', $file, $m)) {
+			$candidate = (int) $m[1];
+			if (in_array($candidate, $allowedWeights, true)) {
+				$weight = $candidate;
+			}
+		}
+
+		if (preg_match('/^([a-z0-9]+(?:-[a-z0-9]+)*)-v\d+/i', $file, $matches)) {
+			$fontName = $matches[1];
+			// Bindet die Bindestriche in Spaces um
+			$fontName = ucwords(str_replace('-', ' ', $fontName));
+		}
+
+		$custom_css .= '/*' . $file . '*/';
+		$custom_css .= '@font-face {';
+		$custom_css .= 'font-family: "' . $fontName . '";';
+		$custom_css .= 'font-style: ' . $fontStyle . ';';
+		$custom_css .= 'font-weight: '. $weight . ';';
+		$custom_css .= 'src: url("' . $src . '.woff2") format("woff2"),';
+		$custom_css .= 'src: url("' . $src . '.woff") format("woff");';
+
+		$custom_css .= '}';
+	}	
+
+	update_option('custom_css', $custom_css);
+	return $custom_css;
+}
