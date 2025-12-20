@@ -12,7 +12,7 @@
  * Requires PHP: 5.6
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Update URI:  https://melaniemueller.design/development/melaniemueller.design-localfonts/info.json
- * Version: v0.0.2.2
+ * Version: v0.0.2.3
  */
 
 /*add localfonts folder to wp-content*/
@@ -171,24 +171,27 @@ function get_all_font_files() {
 	$custom_css = '';
 
 	if (!is_dir($path) || !is_readable($path)) {
-		return;
+		return '';
 	}
 
 	$files = array_diff(scandir($path), array('..', '.'));
 	if (empty($files)) {
-		return;
+		return'';
 	}
 
+	$allowedWeights = [100,200,300,400,500,600,700,800,900];
+
 	foreach ( $files as $file) {
-		$fontStyle = preg_match('/italic/i', $file) ? 'italic' : 'normal';
-		$src = home_url('/wp-content/localfonts/' . $filename, 'https');
+
+		// Nur .woff2 Dateien zulassen
 		if (!preg_match('/\.woff2$/i', $file)) {
-			continue; // oder return, je nach Kontext
+			continue;
 		}
+
+		$fontStyle = preg_match('/italic/i', $file) ? 'italic' : 'normal';
 		$filename = preg_replace('/\.woff2$/i', '', $file);
+		$src = home_url('/wp-content/localfonts/' . $filename, 'https');
 
-
-		$allowedWeights = [100,200,300,400,500,600,700,800,900];
 		$weight = 400; // default
 		if (preg_match('/-(\d{3})\./', $file, $m)) {
 			$candidate = (int) $m[1];
