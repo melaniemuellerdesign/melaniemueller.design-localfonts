@@ -59,7 +59,7 @@ jobs:
           cp -r info.json result/
           
       - name: Upload ZIP archive
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ vars.PRODUCTNAME }}  # Name of the artifact without any special characters or spaces
           path: result/${{ vars.PRODUCTNAME }}.zip
