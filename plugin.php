@@ -12,7 +12,7 @@
  * Requires PHP: 5.6
  * License URI: https://www.gnu.org/licenses/gpl-2.0.txt
  * Update URI:  https://melaniemueller.design/development/melaniemueller.design-localfonts/info.json
- * Version: v0.0.2.3
+ * Version: v0.0.2.4
  */
 
 /*add localfonts folder to wp-content*/
@@ -190,7 +190,11 @@ function get_all_font_files() {
 
 		$fontStyle = preg_match('/italic/i', $file) ? 'italic' : 'normal';
 		$filename = preg_replace('/\.woff2$/i', '', $file);
-		$src = home_url('/wp-content/localfonts/' . $filename, 'https');
+		if ( is_ssl() ) {
+			$src = home_url('/wp-content/localfonts/' . $filename, 'https');
+		} else {
+			$src = home_url('/wp-content/localfonts/' . $filename, 'http');
+		}
 
 		$weight = 400; // default
 		if (preg_match('/-(\d{3})\./', $file, $m)) {
